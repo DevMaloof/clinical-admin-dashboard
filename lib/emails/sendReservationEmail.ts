@@ -1,29 +1,29 @@
-// /lib/emails/sendReservationEmail.ts
+// /lib/emails/sendAppointmentEmail.ts
 import transporter from "@/lib/nodemailer";
 
 type AppointmentStatus = "approved" | "cancelled";
 
 export async function sendAppointmentEmail(
-  to: string,
-  name: string,
-  status: AppointmentStatus
+    to: string,
+    name: string,
+    status: AppointmentStatus
 ): Promise<{ error?: string }> {
-  const subject =
-    status === "approved"
-      ? "✅ Your Appointment Has Been Confirmed - Maloof Health"
-      : "❌ Your Appointment Has Been Cancelled - Maloof Health";
+    const subject =
+        status === "approved"
+            ? "✅ Your Appointment Has Been Confirmed - Maloof Health"
+            : "❌ Your Appointment Has Been Cancelled - Maloof Health";
 
-  const title =
-    status === "approved"
-      ? "Appointment Confirmed ✅"
-      : "Appointment Cancelled ❌";
+    const title =
+        status === "approved"
+            ? "Appointment Confirmed ✅"
+            : "Appointment Cancelled ❌";
 
-  const message =
-    status === "approved"
-      ? `We're pleased to inform you that your appointment with <b>Maloof Health Systems</b> has been confirmed. Our medical team looks forward to providing you with exceptional care.`
-      : `We regret to inform you that your appointment at <b>Maloof Health Systems</b> has been cancelled. Please contact us to reschedule at your earliest convenience.`;
+    const message =
+        status === "approved"
+            ? `We're pleased to inform you that your appointment with <b>Maloof Health Systems</b> has been confirmed. Our medical team looks forward to providing you with exceptional care.`
+            : `We regret to inform you that your appointment at <b>Maloof Health Systems</b> has been cancelled. Please contact us to reschedule at your earliest convenience.`;
 
-  const html = `
+    const html = `
     <!DOCTYPE html>
     <html>
     <head>
@@ -127,22 +127,22 @@ export async function sendAppointmentEmail(
     </html>
   `;
 
-  try {
-    const mailOptions = {
-      from: {
-        name: "Maloof Health Systems",
-        address: process.env.GMAIL_USER!,
-      },
-      to,
-      subject,
-      html,
-    };
+    try {
+        const mailOptions = {
+            from: {
+                name: "Maloof Health Systems",
+                address: process.env.GMAIL_USER!,
+            },
+            to,
+            subject,
+            html,
+        };
 
-    await transporter.sendMail(mailOptions);
-    console.log(`✅ Appointment email sent to ${to}`);
-    return {};
-  } catch (error: any) {
-    console.error("💥 Error sending appointment email:", error);
-    return { error: error.message || "Unexpected error" };
-  }
+        await transporter.sendMail(mailOptions);
+        console.log(`✅ Appointment email sent to ${to}`);
+        return {};
+    } catch (error: any) {
+        console.error("💥 Error sending appointment email:", error);
+        return { error: error.message || "Unexpected error" };
+    }
 }

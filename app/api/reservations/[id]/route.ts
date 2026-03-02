@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { connectCustomerDB } from "@/lib/mongodb";
 import Reservation, { IReservation } from "@/models/Reservation";
 import { Types } from "mongoose";
-import { sendReservationEmail } from "@/lib/emails/sendReservationEmail";
+import { sendAppointmentEmail } from "@/lib/emails/sendReservationEmail";
 
 // Lean type helper
 type LeanReservation = Omit<IReservation, 'save' | 'validate' | 'remove'> & { _id: string };
@@ -92,10 +92,10 @@ export async function PUT(
 
     // Send emails if status changes
     if (updateData.reservationStatus === "confirmed") {
-      await sendReservationEmail(updated.email, updated.name, "approved");
+      await sendAppointmentEmail(updated.email, updated.name, "approved");
     }
     if (updateData.reservationStatus === "cancelled") {
-      await sendReservationEmail(updated.email, updated.name, "cancelled");
+      await sendAppointmentEmail(updated.email, updated.name, "cancelled");
     }
 
     return NextResponse.json(formatReservation(updated), { status: 200 });
